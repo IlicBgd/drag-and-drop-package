@@ -14,13 +14,23 @@ namespace Tools.DragAndDrop
         [SerializeField, HideInInspector]
         Collider2D collider2d;
         [SerializeField, HideInInspector]
-        InputSystemUIInputModule inputSystemUIInputModule;
-        [SerializeField, HideInInspector]
         Rigidbody2D rigidbody2d;
         public UnityEvent<Item> onItemDropped;
         public UnityEvent<Item> onItemPicked;
 
         Vector2 offset;
+        InputSystemUIInputModule _inputSystemUIInputModule;
+        InputSystemUIInputModule inputSystemUIInputModule
+        {
+            get
+            {
+                if (_inputSystemUIInputModule == null && EventSystem.current != null)
+                {
+                    _inputSystemUIInputModule = (InputSystemUIInputModule)EventSystem.current.currentInputModule;
+                }
+                return _inputSystemUIInputModule;
+            }
+        }
         Vector2 mousePosition
         {
             get
@@ -38,7 +48,6 @@ namespace Tools.DragAndDrop
         {
             collider2d = GetComponent<Collider2D>();
             rigidbody2d = GetComponent<Rigidbody2D>();
-            inputSystemUIInputModule = (InputSystemUIInputModule)EventSystem.current.currentInputModule;
             collider2d.isTrigger = true;
             rigidbody2d.bodyType = RigidbodyType2D.Kinematic;
         }
