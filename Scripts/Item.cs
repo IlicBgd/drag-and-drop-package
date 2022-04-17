@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace Tools.DragAndDrop
 {
@@ -12,6 +13,8 @@ namespace Tools.DragAndDrop
     {
         [SerializeField, HideInInspector]
         Collider2D collider2d;
+        [SerializeField, HideInInspector]
+        InputSystemUIInputModule inputSystemUIInputModule;
         [SerializeField, HideInInspector]
         Rigidbody2D rigidbody2d;
         public UnityEvent<Item> onItemDropped;
@@ -22,7 +25,7 @@ namespace Tools.DragAndDrop
         {
             get
             {
-                Vector2 pointerPosition = Mouse.current.position.ReadValue();
+                Vector2 pointerPosition = inputSystemUIInputModule.point.action.ReadValue<Vector2>();
                 return Camera.main.ScreenToWorldPoint(pointerPosition);
             }
         }
@@ -35,6 +38,7 @@ namespace Tools.DragAndDrop
         {
             collider2d = GetComponent<Collider2D>();
             rigidbody2d = GetComponent<Rigidbody2D>();
+            inputSystemUIInputModule = (InputSystemUIInputModule)EventSystem.current.currentInputModule;
             collider2d.isTrigger = true;
             rigidbody2d.bodyType = RigidbodyType2D.Kinematic;
         }
